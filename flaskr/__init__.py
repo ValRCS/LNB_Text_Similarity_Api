@@ -35,6 +35,7 @@ def return_top_fragments(df, clist, num_frags=5, padding=10, offset=2):
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
+    app.config['JSON_AS_ASCII'] = False
 
     df = pd.read_parquet('data/lima_lemma_index_20222610.parquet') # FIXME to configurable path
 
