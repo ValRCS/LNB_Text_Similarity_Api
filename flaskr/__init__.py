@@ -45,4 +45,9 @@ def create_app(test_config=None):
             ]   
         })
 
+    @app.errorhandler(404)
+    def page_not_found(e):
+    # note that we set the 404 status explicitly
+        return jsonify({'info':'valid paths are search/term1/term2/term3'}), 404
+
     return app
