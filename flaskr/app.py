@@ -37,6 +37,39 @@ def disp(t1,t2,t3):
     })
   
 
+def create_app(config_filename):
+    app = Flask(__name__)
+    app.config.from_pyfile(config_filename)
+
+    @app.route('/', methods = ['GET', 'POST'])
+    def home():
+        if(request.method == 'GET'):
+            info = "LNB text similarity API prototype 0.0.3"
+            data = "use /search/<name1>/<name2>/<name3> to search for text fragments with the given names"
+            return jsonify({'data': data,
+                            'info': info})
+
+    @app.route('/search/<t1>/<t2>/<t3>/', methods = ['GET'])
+    def disp(t1,t2,t3):
+    
+        return jsonify({
+            'search_terms': f"{t1} {t2} {t3}",
+            'results': [
+                {"domID": "1", "title": "title1", "url": "url1", "snippet": "snippet1"},
+                {"domID": "2", "title": "title2", "url": "url2", "snippet": "snippet2"}
+            ]   
+        })
+
+    # from yourapplication.model import db
+    # db.init_app(app)
+
+    # from yourapplication.views.admin import admin
+    # from yourapplication.views.frontend import frontend
+    # app.register_blueprint(admin)
+    # app.register_blueprint(frontend)
+
+    return app
+
 
 # driver function
 if __name__ == '__main__':
