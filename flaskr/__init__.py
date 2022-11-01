@@ -87,6 +87,12 @@ def create_app(test_config=None):
     def plaintext(fname):
         text = plaintext_df.loc[fname,"text"]
         return jsonify({'fname':fname, 'text': text})
+
+    # server plaintext as text/plain
+    @app.route('/plaintext/raw/<fname>', methods = ['GET'])
+    def plaintext_raw(fname):
+        text = plaintext_df.loc[fname,"text"]
+        return text
     
     @app.errorhandler(404)
     def page_not_found(e):
