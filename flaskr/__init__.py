@@ -2,7 +2,7 @@
 
 from flask import Flask, jsonify, request
 import pandas as pd
-import numpy as np
+import numpy as np           
 
 def find_merge_index(df, term_list=()):
     index_list = []
