@@ -2,7 +2,13 @@
 
 from flask import Flask, jsonify, request
 import pandas as pd
-import numpy as np           
+import numpy as np  
+from pathlib import Path
+
+def load_all_chunks_as_df(pattern='data/lima_20221101_*.parquet'):
+    df = pd.concat([pd.read_parquet(f) for f in Path().glob(pattern)])
+    return df
+
 
 def find_merge_index(df, term_list=()):
     index_list = []
@@ -38,7 +44,7 @@ def create_app(test_config=None):
     app.config['JSON_AS_ASCII'] = False
 
     df = pd.read_parquet('data/lima_lemma_index_20222610.parquet') # FIXME to configurable path
-
+    plaintext_df = load_all_chunks_as_df()
 
     # app = Flask(__name__, instance_relative_config=True)
     # app.config.from_mapping(
@@ -75,6 +81,12 @@ def create_app(test_config=None):
         frag_list = return_top_fragments(df, clist)
         return jsonify({'search_terms': f"{t1} {t2} {t3}",
         'fragments': frag_list})
+
+    # serve plaintext files
+    @app.route('/plaintext/<fname>', methods = ['GET'])
+    def plaintext(fname):
+        text = plaintext_df[plaintext_df.fname==fname].text.values
+        return jsonify({'fname':fname, 'text': text})
     
     @app.errorhandler(404)
     def page_not_found(e):
