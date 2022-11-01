@@ -85,7 +85,7 @@ def create_app(test_config=None):
     # serve plaintext files
     @app.route('/plaintext/<fname>', methods = ['GET'])
     def plaintext(fname):
-        text = plaintext_df.loc[fname,:].text.values
+        text = plaintext_df.loc[fname,"text"]
         return jsonify({'fname':fname, 'text': text})
     
     @app.errorhandler(404)
