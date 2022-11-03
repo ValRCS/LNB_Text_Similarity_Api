@@ -18,8 +18,8 @@
         <input type="submit" value="Search">
     </form>
     <hr>
-    {% for file_name in pattern_results %}
-    <div class="result-file">{{ file_name }}</div>
+    {% for file_dict in dict_list %}
+    <div class="result-file">{{ <a class="result-link" href="{{ file_dict['url']}}">file_dict['fname']</a> }}</div>
     {% endfor %}
     <footer>LNB (C)2022</footer>
 </body>

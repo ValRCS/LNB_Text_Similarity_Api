@@ -153,7 +153,9 @@ def create_app(test_config=None):
         # find indexes
         # todo make window adjustable
         pattern_results = find_pattern(plaintext_df, term_list, window=50, verbose=True)
-        return render_template('search.html', pattern_results=pattern_results)
+        url_list = [f"/plaintext/html/{fname}" for fname in pattern_results]
+        dict_list = [{"url": url, "fname": fname} for url, fname in zip(url_list, pattern_results)]
+        return render_template('search.html', dict_list=dict_list)
         
     
     @app.errorhandler(404)
