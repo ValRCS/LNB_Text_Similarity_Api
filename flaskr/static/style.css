@@ -135,3 +135,7 @@ input[type=submit] {
     align-self: start;
     min-width: 10em;
 }
+
+.search-box {
+    width: 70%;
+}
