@@ -1,6 +1,6 @@
 # import os
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, url_for
 import pandas as pd
 import numpy as np  
 from pathlib import Path
@@ -93,6 +93,14 @@ def create_app(test_config=None):
     def plaintext_raw(fname):
         text = plaintext_df.loc[fname,"text"]
         return text
+
+    # serve plaintext as html
+    @app.route('/plaintext/html/<fname>', methods = ['GET'])
+    def plaintext_html(fname):
+        text = plaintext_df.loc[fname,"text"]
+        # pass text to jinja template
+        return render_template('plaintext.html', text=text, fname=fname)
+        
     
     @app.errorhandler(404)
     def page_not_found(e):
