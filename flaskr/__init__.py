@@ -68,7 +68,7 @@ def find_pattern(df, word_tuple, window=100, verbose=True, ending_replace_dict=e
         start_datetime = datetime.now()
         print("Starting search at:", start_datetime)
         
-    found_df = df[df["lower_text"].str.contains(pat=pattern, case=False)]
+    found_df = df[df["text"].str.contains(pat=pattern, case=False)]
     if verbose:
         end_datetime = datetime.now()
         print("Found", found_df.shape[0], "rows at:", end_datetime)
