@@ -54,11 +54,11 @@ def return_top_fragments(df, clist, num_frags=5, padding=10, offset=2):
 def create_pattern(word_tuple, window=100, ending_replace_dict=ending_replace_dict, is_stemmed=False):
     """Create regex pattern from word_tuple and ending_replace_dict"""
     # create pattern from word_tuple
-    word_list = []
-    for word in word_tuple:
-        if word[-1] in ending_replace_dict:
-            word = word[:-1] + ending_replace_dict[word[-1]]
-        word_list.append(word)
+    word_list = list(word_tuple)
+    if is_stemmed:
+        word_list = [stem(word) for word in word_list]
+        word_list = [word[:-1]+ending_replace_dict.get(word[-1], word[-1]) for word in word_list]
+
     pattern = (".{1," + str(window) + "}").join(word_list)
     return pattern
 
@@ -154,11 +154,10 @@ def create_app(test_config=None):
         is_stemmed = bool(request.form.get('is_stemmed'))
         # split terms into list
         term_list = terms.split()
-        if is_stemmed:
-            term_list = [stemmer.stem(term) for term in term_list]
+
         # find indexes
         # todo make window adjustable
-        search_pattern = create_pattern(terms, 
+        search_pattern = create_pattern(term_list, 
             window=window,
             ending_replace_dict=ending_replace_dict,
             is_stemmed=is_stemmed)
