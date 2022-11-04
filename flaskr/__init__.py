@@ -5,6 +5,18 @@ import pandas as pd
 import numpy as np  
 from pathlib import Path
 from datetime import datetime
+from LatvianStemmer import stem
+
+ending_replace_dict = {
+    "l": "[lļ]",
+    "r": "[rŗ]",
+    "n": "[nņ]",
+    "s": "[sš]",
+    "z": "[zž]",
+    "j": "[jģ]",
+    "c": "[cč]",
+    "d": "[dķ]"
+}
 
 def load_all_chunks_as_df(pattern='data/lima_20221101_*.parquet'):
     df = pd.concat([pd.read_parquet(f) for f in Path().glob(pattern)])
@@ -39,7 +51,7 @@ def return_top_fragments(df, clist, num_frags=5, padding=10, offset=2):
     frag_list = [return_fragment(df, close_index, padding) for close_index in clist[offset:num_frags+offset]]
     return frag_list
 
-def create_pattern(word_tuple, ending_replace_dict, window=100):
+def create_pattern(word_tuple, window=100, ending_replace_dict=ending_replace_dict, is_stemmed=False):
     """Create regex pattern from word_tuple and ending_replace_dict"""
     # create pattern from word_tuple
     word_list = []
@@ -50,19 +62,9 @@ def create_pattern(word_tuple, ending_replace_dict, window=100):
     pattern = (".{1," + str(window) + "}").join(word_list)
     return pattern
 
-ending_replace_dict = {
-    "l": "[lļ]",
-    "r": "[rŗ]",
-    "n": "[nņ]",
-    "s": "[sš]",
-    "z": "[zž]",
-    "j": "[jģ]",
-    "c": "[cč]",
-    "d": "[dķ]"
-}
 
-def find_pattern(df, word_tuple, window=100, verbose=True, ending_replace_dict=ending_replace_dict):
-    pattern = create_pattern(word_tuple, ending_replace_dict, window=window)
+
+def find_pattern(df, pattern, verbose=True):
     if verbose:
         print("Will look for Pattern:", pattern)
         start_datetime = datetime.now()
@@ -148,14 +150,24 @@ def create_app(test_config=None):
     def search_post():
         # get form data
         terms = request.form['terms']
+        window = int(request.form['window_size'])
+        is_stemmed = bool(request.form.get('is_stemmed'))
         # split terms into list
         term_list = terms.split()
+        if is_stemmed:
+            term_list = [stemmer.stem(term) for term in term_list]
         # find indexes
         # todo make window adjustable
-        pattern_results = find_pattern(plaintext_df, term_list, window=50, verbose=True)
+        search_pattern = create_pattern(terms, 
+            window=window,
+            ending_replace_dict=ending_replace_dict,
+            is_stemmed=is_stemmed)
+        pattern_results = find_pattern(plaintext_df, 
+                                        search_pattern,
+            verbose=True)
         url_list = [f"/plaintext/html/{fname}" for fname in pattern_results]
         dict_list = [{"url": url, "fname": fname} for url, fname in zip(url_list, pattern_results)]
-        return render_template('search.html', dict_list=dict_list)
+        return render_template('search.html', dict_list=dict_list, search_pattern=search_pattern)
         
     
     @app.errorhandler(404)

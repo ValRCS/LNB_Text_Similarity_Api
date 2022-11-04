@@ -13,8 +13,18 @@
     <h1>Search Documents</h1>
     <hr>
     <form action="{{ url_for('search') }}" method="post">
-        <label for="search">Search:</label>
+        <label for="terms">Search:</label>
         <input class="search-box" type="text" name="terms" id="terms" placeholder="Enter terms separated by space">
+        <!-- checkbox for is_stemmed -->
+        <!-- label for is_stemmed -->   
+        <div class="blankie"></div>
+        <label for="is_stemmed">Stem search terms</label>
+        <input type="checkbox" name="is_stemmed" id="is_stemmed" checked>
+        <div class="blankie"></div>    
+        <!-- slider for window_size  1 to 200 -->
+        <label for="window_size">Search Window size between terms:</label>
+        <input type="range" name="window_size" id="window_size" min="1" max="200" value="50">
+        <div class="blankie"></div>
         <input type="submit" value="Search">
     </form>
     <hr>
