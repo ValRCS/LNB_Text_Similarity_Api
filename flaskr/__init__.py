@@ -6,16 +6,25 @@ import numpy as np
 from pathlib import Path
 from datetime import datetime
 from LatvianStemmer import stem
-
+# http://valoda.ailab.lv/latval/vidusskolai/morfol/lietv-mija.htm
 ending_replace_dict = {
-    "l": "[lļ]",
-    "r": "[rŗ]",
-    "n": "[nņ]",
+    "v": "vj",
+    "t": "[tš]",
+    "d": "[dž]",
+    "c": "[cč]",
     "s": "[sš]",
     "z": "[zž]",
-    "j": "[jģ]",
-    "c": "[cč]",
-    "d": "[dķ]"
+    "n": "[nņ]",
+    "l": "[lļ]",
+    "sn": "[sn|šņ]",
+    "zn": "[zn|žņ]",
+    "sl": "[sl|šļ]",
+    "zl": "[zl|žļ]",
+    "ln": "[ln|ļņ]",
+    "kst": "[kst|kš]",
+  
+
+
 }
 
 def load_all_chunks_as_df(pattern='data/lima_20221101_*.parquet'):
