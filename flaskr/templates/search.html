@@ -16,11 +16,11 @@
         <label for="terms">Search:</label>
         <input class="search-box" type="text" name="terms" id="terms" placeholder="Enter terms separated by space">
         <!-- checkbox for is_stemmed -->
-        <!-- label for is_stemmed -->   
+        <!-- label for is_stemmed -->
         <div class="blankie"></div>
         <label for="is_stemmed">Stem search terms</label>
         <input type="checkbox" name="is_stemmed" id="is_stemmed" checked>
-        <div class="blankie"></div>    
+        <div class="blankie"></div>
         <!-- slider for window_size  1 to 200 -->
         <label for="window_size">Search Window size between terms:</label>
         <input type="range" name="window_size" id="window_size" min="1" max="200" value="50">
@@ -34,7 +34,8 @@
     <p class="search-pattern">{{ search_pattern }} </p>
     <hr>
     {% for file_dict in dict_list %}
-    <div class="result-file"> <a class="result-link" href="{{ file_dict['url'] }}" target="_blank"> {{ file_dict['fname'] }}</a> </div>
+    <div class="result-file"> <a class="result-link" href="{{ file_dict['url'] + get_args }}" target="_blank"> {{
+            file_dict['fname'] }}</a> </div>
     {% endfor %}
     <footer>LNB (C)2022</footer>
     <script>
@@ -42,7 +43,7 @@
         var slider = document.getElementById("window_size");
         var output = document.getElementById("window_size_text");
         output.value = slider.value;
-        slider.oninput = function() {
+        slider.oninput = function () {
             output.value = this.value;
         }
     </script>

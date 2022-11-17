@@ -164,6 +164,9 @@ def create_app(test_config=None):
         # split terms into list
         term_list = terms.split()
 
+        # create GET arguments from term_list
+        get_args = "?terms="+ "_".join(term_list)
+
         # find indexes
         # todo make window adjustable
         search_pattern = create_pattern(term_list, 
@@ -175,7 +178,7 @@ def create_app(test_config=None):
             verbose=True)
         url_list = [f"/plaintext/html/{fname}" for fname in pattern_results]
         dict_list = [{"url": url, "fname": fname} for url, fname in zip(url_list, pattern_results)]
-        return render_template('search.html', dict_list=dict_list, search_pattern=search_pattern)
+        return render_template('search.html', dict_list=dict_list, search_pattern=search_pattern, get_args=get_args)
         
     
     @app.errorhandler(404)
