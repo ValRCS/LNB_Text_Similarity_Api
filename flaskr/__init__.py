@@ -1,6 +1,6 @@
 # import os
 
-from flask import Flask, jsonify, request, render_template, url_for
+from flask import Flask, jsonify, request, render_template, url_for, escape
 import pandas as pd
 import numpy as np  
 from pathlib import Path
@@ -142,10 +142,38 @@ def create_app(test_config=None):
         text = plaintext_df.loc[fname,"text"]
         return text
 
+
+    # highlight all terms in term_list using <mark> tags 
+    def highlight_terms(text, term_list,stems=True):
+        for term in term_list:
+            if stems:
+                term = stem(term)
+            text = text.replace(term, f"<mark>{term}</mark>")
+        return text
+
+
+    html_escape_table = {
+    "&": "&amp;",
+    '"': "&quot;",
+    "'": "&apos;",
+    ">": "&gt;",
+    "<": "&lt;",
+}
+    def html_escape(text):
+        return "".join(html_escape_table.get(c,c) for c in text)
+
     # serve plaintext as html
     @app.route('/plaintext/html/<fname>', methods = ['GET'])
     def plaintext_html(fname):
         text = plaintext_df.loc[fname,"text"]
+        terms = request.args.get('terms')
+        term_list = terms.split("_")
+        # escape html 
+        # text = escape(text) # returns markup 
+        text = html_escape(text) # had to use my own function because escape() returns markup
+
+        text = highlight_terms(text, term_list)
+
         # pass text to jinja template
         return render_template('plaintext.html', text=text, fname=fname)
 

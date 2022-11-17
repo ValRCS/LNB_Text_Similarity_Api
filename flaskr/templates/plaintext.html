@@ -14,7 +14,8 @@
     <!-- link back to search page -->
     <a href="/search">New Search</a>
     <hr>
-    <p>{{ text }}</p>
+    <!-- safe is dangerous with untrusted data, use with caution to avoid XSS! -->
+    <p>{{ text|safe }}</p>
     <hr>
     <footer>LNB (C)2022</footer>
 </body>
