@@ -2,6 +2,7 @@ html {
     font-family: sans-serif;
     background: #eee;
     padding: 1rem;
+    line-height: 1rem;
 }
 
 body {
@@ -138,4 +139,8 @@ input[type=submit] {
 
 .search-box {
     width: 70%;
+}
+
+.blankie {
+    height: 0.5rem;
 }

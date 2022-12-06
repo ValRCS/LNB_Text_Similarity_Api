@@ -25,13 +25,21 @@
         <label for="window_size">Search Window size between terms:</label>
         <input type="range" name="window_size" id="window_size" min="1" max="200" value="50">
         <!-- show slider value in text box -->
-        <input type="text" name="window_size_text" id="window_size_text" value="50" readonly>
+        <input type="number" name="window_size_text" id="window_size_text" value="50" readonly>
 
+        <!-- add numeric inputs for beg_year and end_year -->
+        <div class="blankie"></div>
+        <label for="beg_year">Beginning Year:</label>
+        <input type="number" name="beg_year" id="beg_year" min="1945" max="1994" value="1945">
+        <label for="end_year">Ending Year:</label>
+        <input type="number" name="end_year" id="end_year" min="1945" max="1994" value="1994">
         <div class="blankie"></div>
         <input type="submit" value="Search">
     </form>
+    <hr>
     <h2>Search Results for:</h2>
     <p class="search-pattern">{{ search_pattern }} </p>
+    <p>From year {{ beg_year }} until year {{ end_year }} </p>
     <hr>
     {% for file_dict in dict_list %}
     <div class="result-file"> <a class="result-link" href="{{ file_dict['url'] + get_args }}" target="_blank"> {{
@@ -40,8 +48,8 @@
     <footer>LNB (C)2022</footer>
     <script>
         // get slider value and display in text box
-        var slider = document.getElementById("window_size");
-        var output = document.getElementById("window_size_text");
+        const slider = document.getElementById("window_size");
+        const output = document.getElementById("window_size_text");
         output.value = slider.value;
         slider.oninput = function () {
             output.value = this.value;

@@ -188,11 +188,13 @@ def create_app(test_config=None):
         # get form data
         terms = request.form['terms']
         window = int(request.form['window_size'])
+        beg_year = int(request.form['beg_year'])
+        end_year = int(request.form['end_year'])
         is_stemmed = bool(request.form.get('is_stemmed'))
         # split terms into list
         term_list = terms.split()
 
-        # create GET arguments from term_list
+        # create GET arguments from term_list - used for highlighting terms in plaintext
         get_args = "?terms="+ "_".join(term_list)
 
         # find indexes
@@ -201,12 +203,20 @@ def create_app(test_config=None):
             window=window,
             ending_replace_dict=ending_replace_dict,
             is_stemmed=is_stemmed)
-        pattern_results = find_pattern(plaintext_df, 
+
+        df = plaintext_df
+        df_year = df[(df["year"] >= beg_year) & (df["year"] <= end_year)]
+        pattern_results = find_pattern(df_year, 
                                         search_pattern,
             verbose=True)
         url_list = [f"/plaintext/html/{fname}" for fname in pattern_results]
         dict_list = [{"url": url, "fname": fname} for url, fname in zip(url_list, pattern_results)]
-        return render_template('search.html', dict_list=dict_list, search_pattern=search_pattern, get_args=get_args)
+        return render_template('search.html', 
+                dict_list=dict_list, 
+                search_pattern=search_pattern, 
+                get_args=get_args,
+                beg_year=beg_year,
+                end_year=end_year)
         
     
     @app.errorhandler(404)
