@@ -27,7 +27,7 @@ ending_replace_dict = {
 
 }
 
-def load_all_chunks_as_df(pattern='data/lima_20221101_*.parquet'):
+def load_all_chunks_as_df(pattern='data/tuve*.parquet'):
     df = pd.concat([pd.read_parquet(f) for f in Path().glob(pattern)])
     return df
 
