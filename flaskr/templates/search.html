@@ -47,6 +47,9 @@
     <p class="search-pattern">{{ search_pattern }} </p>
     <p>From year {{ beg_year }} until year {{ end_year }} </p>
     <hr>
+    {% if dict_list %}
+
+
     <table id="search_results_id" class="display">
         <thead>
             <tr>
@@ -69,6 +72,7 @@
     {% endfor %}
     </tbody>
     </table>
+    {% endif %}
     <footer>LNB (C)2022</footer>
     <script>
         // get slider value and display in text box
